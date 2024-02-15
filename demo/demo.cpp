@@ -45,11 +45,31 @@ int main(int argc, char *argv[]) {
     }
 
     for (int i = 0; i < edge_points.size(); i++) {
+        //cv::putText(test_img_raw, std::to_string(i), cv::Point(edge_points.at(i)), cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(225,225,225));
         cv::circle(test_img_raw, cv::Point(edge_points.at(i)), 4, cv::Scalar(155, 15, 155), -1);
     }
 
     cv::namedWindow("Edge Points",cv::WINDOW_AUTOSIZE);
     cv::imshow("Edge Points", test_img_raw);
+
+    for(int i = 0; i < 20; i++) {
+        cv::Mat temp = test_img_raw.clone();
+
+        std::vector<cv::Vec2f> edge_point_subset;
+        for(int j = 0; j < 6; j++) {
+            edge_point_subset.push_back(edge_points.at((i+j) % 20));
+            cv::circle(temp, cv::Point(edge_points.at((i+j) % 20)), 4, cv::Scalar(15, 255, 255), -1);
+        }
+
+        cv::RotatedRect detected_ellipse = fitEllipse(edge_point_subset);
+
+            
+        cv::ellipse(temp, detected_ellipse.center, cv::Size(detected_ellipse.size.width/2, detected_ellipse.size.height/2), detected_ellipse.angle, 0, 360, cv::Scalar(255, 255, 0), 3);
+
+        
+        cv::namedWindow("Ellipse " + std::to_string(i),cv::WINDOW_AUTOSIZE);
+        cv::imshow("Ellipse" + std::to_string(i), temp);
+    }
 
     // Whole run
     std::optional<cv::RotatedRect> fast_contour_result = fast_contour(test_img_prep);
@@ -63,8 +83,8 @@ int main(int argc, char *argv[]) {
     
     cv::ellipse(test_img_raw, detected_ellipse.center, cv::Size(detected_ellipse.size.width/2, detected_ellipse.size.height/2), detected_ellipse.angle, 0, 360, cv::Scalar(255, 255, 0), 3);
 
-    cv::namedWindow("Ellipse",cv::WINDOW_AUTOSIZE);
-    cv::imshow("Ellipse", test_img_raw);
+    cv::namedWindow("Best Ellipse",cv::WINDOW_AUTOSIZE);
+    cv::imshow("Best Ellipse", test_img_raw);
     cv::waitKey(0);
 
     return 0;

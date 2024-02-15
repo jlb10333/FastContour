@@ -11,7 +11,7 @@
 using namespace cv;
 using namespace std;
 
-optional<Vec2f> find_moon_point(const Mat& img) {
+optional<Vec2f> find_moon_point(const Mat& img, float threshold) {
     int image_width = img.size().width;
     int image_height = img.size().height;
 
@@ -33,26 +33,35 @@ optional<Vec2f> find_moon_point(const Mat& img) {
     return nullopt;
 }
 
+bool contains_point(vector<Vec2f> vec, Vec2f point) {
+    for(int i = 0; i < vec.size(); i++) {
+        if (vec[i][0] == point[0] && vec[i][1] == point[1]) {
+            return true;
+        }
+    }
+    return false;
+}
+
 vector<Vec2f> find_anchor_points(const Mat& img, const Vec2f& moon_point) {
     int image_width = img.size().width;
     int image_height = img.size().height;
 
-    set<pair<float, float>> anchor_points_set;
+    vector<Vec2f> anchor_points;
 
     Vec2f border_lines[4][2] = {
-        {Vec2f(0, 0), Vec2f(1, 0)}, // y = 0
-        {Vec2f(0, 0), Vec2f(0, 1)}, // x = 0
-        {Vec2f(0, image_height), Vec2f(1, image_height)}, // y = height
-        {Vec2f(image_width, 0), Vec2f(image_width, 1)} // y = width 
+        {Vec2f(0, 0), Vec2f(image_width, 0)}, // y = 0
+        {Vec2f(0, 0), Vec2f(0, image_height)}, // x = 0
+        {Vec2f(0, image_height), Vec2f(image_width, image_height)}, // y = height
+        {Vec2f(image_width, 0), Vec2f(image_width, image_height)} // y = width 
     };
 
     float angle;
     Vec2f line_point;
     optional<Vec2f> intersect_result;
     Vec2f anchor_point;
-    for(int i = 0; i < 16; i++) {
-        angle = (PI/8) * i;
-        line_point = Vec2f(moon_point[0] + cos(angle), moon_point[1] + sin(angle));
+    for(int i = 0; i < 20; i++) {
+        angle = (PI/10) * i;
+        line_point = Vec2f(moon_point[0] + (cos(angle) * image_width * image_height), moon_point[1] + (sin(angle) * image_width * image_height));
 
         for(int j = 0; j < 4; j++) {
             intersect_result = intersect(moon_point, line_point, border_lines[j][0], border_lines[j][1]);
@@ -61,18 +70,11 @@ vector<Vec2f> find_anchor_points(const Mat& img, const Vec2f& moon_point) {
             anchor_point = intersect_result.value();
 
             if(anchor_point[0] < 0 || anchor_point[0] > image_width || anchor_point[1] < 0 || anchor_point[1] > image_height) { continue; }
-            anchor_points_set.insert(pair<float, float>(anchor_point[0], anchor_point[1]));
+            if(contains_point(anchor_points, anchor_point)) { continue; }
+            anchor_points.push_back(anchor_point);
         }
     }
     
-    vector<Vec2f> anchor_points;
-
-    auto it = anchor_points_set.begin();
-    for(int i = 0; i < anchor_points_set.size(); i++) {
-        anchor_points.push_back(Vec2f(it->first, it->second));
-        it++;    
-    }
-
     return anchor_points;
 }
 
@@ -101,7 +103,45 @@ Vec2f regress_to_edge(const Mat& img, const Vec2f& point1, const Vec2f& point2) 
     return midpoint_2d(regress_point1, regress_point2);
 }
 
-optional<RotatedRect> fast_contour(const Mat& img) {
+pair<float, float> calculate_error(const vector<Vec2f>& point_arr, const RotatedRect& ellipse) {
+    float a = ellipse.size.width/2;
+    float b = ellipse.size.height/2;
+
+    float h = ellipse.center.x;
+    float k = ellipse.center.y;
+
+    float A = ellipse.angle;
+
+    float error;
+
+    float maximum_positive_error = 0;
+    float minimum_negative_error = 0;
+    
+    for(int i = 0; i < point_arr.size(); i++) {
+        Vec2f point = point_arr[i];
+        float x = point[0];
+        float y = point[1];
+        
+
+        error = sqrt(
+            (pow(((x-h)*cos(A)) + ((y-k)*sin(A)), 2)/(a*a)) +
+            (pow(((x-h)*sin(A)) - ((y-k)*cos(A)), 2)/(b*b))
+            )-1;
+
+        cout << "point " << i << " error: " << error << "\n";
+
+        if (error > 0 && error > maximum_positive_error) {
+            maximum_positive_error = error;
+        }
+        if (error < 0 && error < minimum_negative_error) {
+            minimum_negative_error = error;
+        }
+    }
+
+    return pair<float, float>(maximum_positive_error, minimum_negative_error);
+}
+
+optional<RotatedRect> fast_contour(const Mat& img, float threshold=30) {
     optional<Vec2f> moon_point_result = find_moon_point(img);
 
     if (!moon_point_result.has_value()) {
@@ -121,24 +161,64 @@ optional<RotatedRect> fast_contour(const Mat& img) {
         edge_points.push_back(regress_to_edge(img, moon_point, anchor_points.at(i)));
     }
 
-    float max_aspect_ratio = -1;
+    float min_error = -1;
+    RotatedRect detected_ellipse;
     RotatedRect best_ellipse;
-    float aspect_ratio;
-    for(int i = 0; i < 16; i++) {
+    pair<float, float> ellipse_error;
+    int best_index;
+
+    float error_stop = 0.05;
+
+    for(int i = 0; i < 20; i++) {
         vector<Vec2f> edge_point_subset;
         for(int j = 0; j < 6; j++) {
-            edge_point_subset.push_back(edge_points.at((i+j) % 16));
+            edge_point_subset.push_back(edge_points.at((i+j) % 20));
         }
 
-        RotatedRect detected_ellipse = fitEllipse(edge_point_subset);
-        aspect_ratio = detected_ellipse.size.width/detected_ellipse.size.height;
+        detected_ellipse = fitEllipse(edge_point_subset);
+        ellipse_error = calculate_error(edge_points, detected_ellipse);
 
-        //cout << "aspect ratio: " << aspect_ratio << " bigger than max? " << max_aspect_ratio << " " << (aspect_ratio > max_aspect_ratio) << "\n";
+        cout << "index: " << i << "; positive error: " << ellipse_error.first << "; negative error: " << ellipse_error.second << ";\n";
 
-        if(max_aspect_ratio == -1 || aspect_ratio > max_aspect_ratio) {
-            max_aspect_ratio = aspect_ratio;
+
+        if(ellipse_error.first > error_stop) {continue;}
+
+        if(min_error == -1 || ellipse_error.second > min_error) {
+            min_error = ellipse_error.second;
             best_ellipse = detected_ellipse;
+            best_index = i;
         }
+    }
+
+    vector<Vec2f> edge_point_subset;
+    for(int i = 0; i < 6; i++) {
+        edge_point_subset.push_back(edge_points.at((best_index + i) % 20));
+    }
+
+    for(int i = 0; i < 14; i++) {
+        edge_point_subset.push_back(edge_points.at((best_index + 6 + i) % 20));
+        detected_ellipse = fitEllipse(edge_point_subset);
+        ellipse_error = calculate_error(edge_points, detected_ellipse);
+
+        if(ellipse_error.first > error_stop || ellipse_error.second > min_error) {
+            edge_point_subset.pop_back();
+            break;
+        }
+
+        best_ellipse = detected_ellipse;
+    }
+
+    for(int i = 0; i < 14; i++) {
+        edge_point_subset.push_back(edge_points.at((best_index - i + 20) % 20));
+        detected_ellipse = fitEllipse(edge_point_subset);
+        ellipse_error = calculate_error(edge_points, detected_ellipse);
+
+        if(ellipse_error.first > error_stop || ellipse_error.second > min_error) {
+            edge_point_subset.pop_back();
+            break;
+        }
+        
+        best_ellipse = detected_ellipse;
     }
 
     return best_ellipse;

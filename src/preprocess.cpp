@@ -59,7 +59,7 @@ void default_preprocess_steps(          // Credit: Gavin Guo, Github: Gavin1937/
     // only leave black & white pixels
     // usually, moon will be white after this conversion
     cv::Mat buff;
-    apply_brightness_contrast(image_out, buff, 0, 127);
+    apply_brightness_contrast(image_out, buff, 0, 30);
     
     // set gray image to black & white only image by setting its threshold
     // opencv impl of threshold
