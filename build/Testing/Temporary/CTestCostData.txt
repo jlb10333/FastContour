@@ -1,0 +1,18 @@
+SumTest.BasicAssertion 3 0.00115343
+Distance2D.BasicAssertion 3 0.00121368
+Midpoint.BassicAssertion 1 0.0035167
+Distance2D.BasicAssertions 104 0.000763408
+Midpoint.BasicAssertions 44 0.000146078
+Intersect.FailCases 104 0.000736056
+Intersect.BasicAssertions 95 0.00076651
+FindMoonPoint.FailsCorrectly 92 0.000790697
+FindMoonPoint.SucceedsCorrectly 2 0.00270976
+FindMoonPoint.SucceedsCorrectlyFirstRound 88 0.000834891
+FindMoonPoint.IteratesCorrectly 88 0.000826883
+ArrayContains.BasicAssertions 0 0
+FindAnchorPoints.BasicAssertions 63 0.00115808
+FloatEqual.BasicAssertions 68 0.00105681
+RegressToEdge.BasicAssertions 49 0.0014696
+Midpoint2D.BasicAssertions 60 0.00123094
+FastContour.BasicAssertions 3 0.229078
+---

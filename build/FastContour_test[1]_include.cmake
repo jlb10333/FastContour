@@ -1,0 +1,5 @@
+if(EXISTS "/home/jlb10333/projects/FastContour/build/FastContour_test[1]_tests.cmake")
+  include("/home/jlb10333/projects/FastContour/build/FastContour_test[1]_tests.cmake")
+else()
+  add_test(FastContour_test_NOT_BUILT FastContour_test_NOT_BUILT)
+endif()
