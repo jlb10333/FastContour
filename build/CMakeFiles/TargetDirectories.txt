@@ -1,6 +1,7 @@
 /home/jlb10333/projects/FastContour/build/CMakeFiles/FastContour.dir
 /home/jlb10333/projects/FastContour/build/CMakeFiles/FastContour_test.dir
 /home/jlb10333/projects/FastContour/build/CMakeFiles/FastContour_demo.dir
+/home/jlb10333/projects/FastContour/build/CMakeFiles/FastContour_demo_multi.dir
 /home/jlb10333/projects/FastContour/build/CMakeFiles/test.dir
 /home/jlb10333/projects/FastContour/build/CMakeFiles/edit_cache.dir
 /home/jlb10333/projects/FastContour/build/CMakeFiles/rebuild_cache.dir

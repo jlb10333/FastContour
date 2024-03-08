@@ -165,6 +165,19 @@ FastContour_demo/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FastContour_demo.dir/build.make CMakeFiles/FastContour_demo.dir/build
 .PHONY : FastContour_demo/fast
 
+#=============================================================================
+# Target rules for targets named FastContour_demo_multi
+
+# Build rule for target.
+FastContour_demo_multi: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 FastContour_demo_multi
+.PHONY : FastContour_demo_multi
+
+# fast build rule for target.
+FastContour_demo_multi/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FastContour_demo_multi.dir/build.make CMakeFiles/FastContour_demo_multi.dir/build
+.PHONY : FastContour_demo_multi/fast
+
 demo/demo.o: demo/demo.cpp.o
 .PHONY : demo/demo.o
 
@@ -188,6 +201,30 @@ demo/demo.s: demo/demo.cpp.s
 demo/demo.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/FastContour_demo.dir/build.make CMakeFiles/FastContour_demo.dir/demo/demo.cpp.s
 .PHONY : demo/demo.cpp.s
+
+demo/demo_multi.o: demo/demo_multi.cpp.o
+.PHONY : demo/demo_multi.o
+
+# target to build an object file
+demo/demo_multi.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FastContour_demo_multi.dir/build.make CMakeFiles/FastContour_demo_multi.dir/demo/demo_multi.cpp.o
+.PHONY : demo/demo_multi.cpp.o
+
+demo/demo_multi.i: demo/demo_multi.cpp.i
+.PHONY : demo/demo_multi.i
+
+# target to preprocess a source file
+demo/demo_multi.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FastContour_demo_multi.dir/build.make CMakeFiles/FastContour_demo_multi.dir/demo/demo_multi.cpp.i
+.PHONY : demo/demo_multi.cpp.i
+
+demo/demo_multi.s: demo/demo_multi.cpp.s
+.PHONY : demo/demo_multi.s
+
+# target to generate assembly for a file
+demo/demo_multi.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/FastContour_demo_multi.dir/build.make CMakeFiles/FastContour_demo_multi.dir/demo/demo_multi.cpp.s
+.PHONY : demo/demo_multi.cpp.s
 
 src/detector.o: src/detector.cpp.o
 .PHONY : src/detector.o
@@ -320,10 +357,14 @@ help:
 	@echo "... test"
 	@echo "... FastContour"
 	@echo "... FastContour_demo"
+	@echo "... FastContour_demo_multi"
 	@echo "... FastContour_test"
 	@echo "... demo/demo.o"
 	@echo "... demo/demo.i"
 	@echo "... demo/demo.s"
+	@echo "... demo/demo_multi.o"
+	@echo "... demo/demo_multi.i"
+	@echo "... demo/demo_multi.s"
 	@echo "... src/detector.o"
 	@echo "... src/detector.i"
 	@echo "... src/detector.s"

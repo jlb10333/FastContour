@@ -10,14 +10,14 @@
 TEST(FindMoonPoint, FailsCorrectly) {
     cv::Mat test_img = cv::Mat::zeros(cv::Size(200,200), CV_8UC1);
 
-    EXPECT_EQ(find_moon_point(test_img).has_value(), false);
+    EXPECT_EQ(find_moon_point(test_img, 30).has_value(), false);
 }
 
 TEST(FindMoonPoint, SucceedsCorrectlyFirstRound) {
     cv::Mat test_img = cv::Mat::zeros(cv::Size(200,200), CV_8UC1);
     cv::circle(test_img, cv::Point(100, 100), 50, cv::Scalar(255), -1);
 
-    cv::Vec2f result_point = find_moon_point(test_img).value();
+    cv::Vec2f result_point = find_moon_point(test_img, 30).value();
 
     EXPECT_EQ(test_img.at<cv::uint8_t>(std::round(result_point[1]), std::round(result_point[0])), 255);
 }
@@ -26,7 +26,7 @@ TEST(FindMoonPoint, IteratesCorrectly) {
     cv::Mat test_img = cv::Mat::zeros(cv::Size(200,200), CV_8UC1);
     cv::circle(test_img, cv::Point(135, 147), 30, cv::Scalar(255), -1);
 
-    cv::Vec2f result_point = find_moon_point(test_img).value();
+    cv::Vec2f result_point = find_moon_point(test_img, 30).value();
 
     EXPECT_EQ(test_img.at<cv::uint8_t>(std::round(result_point[1]), std::round(result_point[0])), 255);
 }
@@ -43,12 +43,12 @@ TEST(RegressToEdge, BasicAssertions) {
     cv::Mat test_img = cv::Mat::zeros(cv::Size(200,200), CV_8UC1);
     cv::circle(test_img, cv::Point(100, 100), 50, cv::Scalar(255), -1);
 
-    cv::Vec2f edge_point = regress_to_edge(test_img, cv::Vec2f(0, 100), cv::Vec2f(100, 100));
+    cv::Vec2f edge_point = regress_to_edge(test_img, cv::Vec2f(0, 100), cv::Vec2f(100, 100), 30);
 
     EXPECT_EQ(round(edge_point[0]), 50);
     EXPECT_EQ(round(edge_point[1]), 100);
 
-    cv::Vec2f edge_point2 = regress_to_edge(test_img, cv::Vec2f(100, 0), cv::Vec2f(100, 100));
+    cv::Vec2f edge_point2 = regress_to_edge(test_img, cv::Vec2f(100, 0), cv::Vec2f(100, 100), 30);
 
     EXPECT_EQ(round(edge_point2[0]), 100);
     EXPECT_EQ(round(edge_point2[1]), 50);

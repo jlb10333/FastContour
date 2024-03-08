@@ -59,4 +59,5 @@ set(CMAKE_DEPEND_INFO_FILES
   "CMakeFiles/FastContour.dir/DependInfo.cmake"
   "CMakeFiles/FastContour_test.dir/DependInfo.cmake"
   "CMakeFiles/FastContour_demo.dir/DependInfo.cmake"
+  "CMakeFiles/FastContour_demo_multi.dir/DependInfo.cmake"
   )

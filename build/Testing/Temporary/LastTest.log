@@ -1,91 +1,48 @@
-Start testing: Jan 11 21:49 PST
+Start testing: Feb 15 23:49 PST
 ----------------------------------------------------------
-1/11 Testing: FindMoonPoint.FailsCorrectly
-1/11 Test: FindMoonPoint.FailsCorrectly
-Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=FindMoonPoint.FailsCorrectly" "--gtest_also_run_disabled_tests"
+1/12 Testing: FindMoonPoint.AtFunctionWorks
+1/12 Test: FindMoonPoint.AtFunctionWorks
+Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=FindMoonPoint.AtFunctionWorks" "--gtest_also_run_disabled_tests"
 Directory: /home/jlb10333/projects/FastContour/build
-"FindMoonPoint.FailsCorrectly" start time: Jan 11 21:49 PST
+"FindMoonPoint.AtFunctionWorks" start time: Feb 15 23:49 PST
 Output:
 ----------------------------------------------------------
 Running main() from /home/jlb10333/googletest/googletest/src/gtest_main.cc
-Note: Google Test filter = FindMoonPoint.FailsCorrectly
+Note: Google Test filter = FindMoonPoint.AtFunctionWorks
 [==========] Running 1 test from 1 test suite.
 [----------] Global test environment set-up.
 [----------] 1 test from FindMoonPoint
-[ RUN      ] FindMoonPoint.FailsCorrectly
-[       OK ] FindMoonPoint.FailsCorrectly (0 ms)
+[ RUN      ] FindMoonPoint.AtFunctionWorks
+int at 100,100: [255, 255, 255]
+int at 50,50: [0, 0, 0]
+/home/jlb10333/projects/FastContour/test/detector_test.cc:17: Failure
+Expected equality of these values:
+  false
+  true
+
+[  FAILED  ] FindMoonPoint.AtFunctionWorks (0 ms)
 [----------] 1 test from FindMoonPoint (0 ms total)
 
 [----------] Global test environment tear-down
 [==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] FindMoonPoint.AtFunctionWorks
+
+ 1 FAILED TEST
 <end of output>
-Test time =   0.07 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
-Test Passed.
-"FindMoonPoint.FailsCorrectly" end time: Jan 11 21:49 PST
-"FindMoonPoint.FailsCorrectly" time elapsed: 00:00:00
-----------------------------------------------------------
-
-2/11 Testing: FindMoonPoint.SucceedsCorrectlyFirstRound
-2/11 Test: FindMoonPoint.SucceedsCorrectlyFirstRound
-Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=FindMoonPoint.SucceedsCorrectlyFirstRound" "--gtest_also_run_disabled_tests"
-Directory: /home/jlb10333/projects/FastContour/build
-"FindMoonPoint.SucceedsCorrectlyFirstRound" start time: Jan 11 21:49 PST
-Output:
-----------------------------------------------------------
-Running main() from /home/jlb10333/googletest/googletest/src/gtest_main.cc
-Note: Google Test filter = FindMoonPoint.SucceedsCorrectlyFirstRound
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from FindMoonPoint
-[ RUN      ] FindMoonPoint.SucceedsCorrectlyFirstRound
-[       OK ] FindMoonPoint.SucceedsCorrectlyFirstRound (0 ms)
-[----------] 1 test from FindMoonPoint (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.07 sec
-----------------------------------------------------------
-Test Passed.
-"FindMoonPoint.SucceedsCorrectlyFirstRound" end time: Jan 11 21:49 PST
-"FindMoonPoint.SucceedsCorrectlyFirstRound" time elapsed: 00:00:00
+Test Failed.
+"FindMoonPoint.AtFunctionWorks" end time: Feb 15 23:49 PST
+"FindMoonPoint.AtFunctionWorks" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-3/11 Testing: FindMoonPoint.IteratesCorrectly
-3/11 Test: FindMoonPoint.IteratesCorrectly
-Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=FindMoonPoint.IteratesCorrectly" "--gtest_also_run_disabled_tests"
-Directory: /home/jlb10333/projects/FastContour/build
-"FindMoonPoint.IteratesCorrectly" start time: Jan 11 21:49 PST
-Output:
-----------------------------------------------------------
-Running main() from /home/jlb10333/googletest/googletest/src/gtest_main.cc
-Note: Google Test filter = FindMoonPoint.IteratesCorrectly
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from FindMoonPoint
-[ RUN      ] FindMoonPoint.IteratesCorrectly
-[       OK ] FindMoonPoint.IteratesCorrectly (0 ms)
-[----------] 1 test from FindMoonPoint (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.07 sec
-----------------------------------------------------------
-Test Passed.
-"FindMoonPoint.IteratesCorrectly" end time: Jan 11 21:49 PST
-"FindMoonPoint.IteratesCorrectly" time elapsed: 00:00:00
-----------------------------------------------------------
-
-4/11 Testing: FindAnchorPoints.BasicAssertions
-4/11 Test: FindAnchorPoints.BasicAssertions
+5/12 Testing: FindAnchorPoints.BasicAssertions
+5/12 Test: FindAnchorPoints.BasicAssertions
 Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=FindAnchorPoints.BasicAssertions" "--gtest_also_run_disabled_tests"
 Directory: /home/jlb10333/projects/FastContour/build
-"FindAnchorPoints.BasicAssertions" start time: Jan 11 21:49 PST
+"FindAnchorPoints.BasicAssertions" start time: Feb 15 23:49 PST
 Output:
 ----------------------------------------------------------
 Running main() from /home/jlb10333/googletest/googletest/src/gtest_main.cc
@@ -94,161 +51,36 @@ Note: Google Test filter = FindAnchorPoints.BasicAssertions
 [----------] Global test environment set-up.
 [----------] 1 test from FindAnchorPoints
 [ RUN      ] FindAnchorPoints.BasicAssertions
-[0, 0]
-[       OK ] FindAnchorPoints.BasicAssertions (0 ms)
+[200, 100]
+/home/jlb10333/projects/FastContour/test/detector_test.cc:49: Failure
+Expected equality of these values:
+  anchor_points.size()
+    Which is: 20
+  16
+
+[  FAILED  ] FindAnchorPoints.BasicAssertions (0 ms)
 [----------] 1 test from FindAnchorPoints (0 ms total)
 
 [----------] Global test environment tear-down
 [==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] FindAnchorPoints.BasicAssertions
+
+ 1 FAILED TEST
 <end of output>
-Test time =   0.07 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
-Test Passed.
-"FindAnchorPoints.BasicAssertions" end time: Jan 11 21:49 PST
+Test Failed.
+"FindAnchorPoints.BasicAssertions" end time: Feb 15 23:49 PST
 "FindAnchorPoints.BasicAssertions" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-5/11 Testing: RegressToEdge.BasicAssertions
-5/11 Test: RegressToEdge.BasicAssertions
-Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=RegressToEdge.BasicAssertions" "--gtest_also_run_disabled_tests"
-Directory: /home/jlb10333/projects/FastContour/build
-"RegressToEdge.BasicAssertions" start time: Jan 11 21:49 PST
-Output:
-----------------------------------------------------------
-Running main() from /home/jlb10333/googletest/googletest/src/gtest_main.cc
-Note: Google Test filter = RegressToEdge.BasicAssertions
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from RegressToEdge
-[ RUN      ] RegressToEdge.BasicAssertions
-[       OK ] RegressToEdge.BasicAssertions (0 ms)
-[----------] 1 test from RegressToEdge (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.07 sec
-----------------------------------------------------------
-Test Passed.
-"RegressToEdge.BasicAssertions" end time: Jan 11 21:49 PST
-"RegressToEdge.BasicAssertions" time elapsed: 00:00:00
-----------------------------------------------------------
-
-6/11 Testing: FastContour.BasicAssertions
-6/11 Test: FastContour.BasicAssertions
-Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=FastContour.BasicAssertions" "--gtest_also_run_disabled_tests"
-Directory: /home/jlb10333/projects/FastContour/build
-"FastContour.BasicAssertions" start time: Jan 11 21:49 PST
-Output:
-----------------------------------------------------------
-Running main() from /home/jlb10333/googletest/googletest/src/gtest_main.cc
-Note: Google Test filter = FastContour.BasicAssertions
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from FastContour
-[ RUN      ] FastContour.BasicAssertions
-[       OK ] FastContour.BasicAssertions (610 ms)
-[----------] 1 test from FastContour (610 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (610 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.69 sec
-----------------------------------------------------------
-Test Passed.
-"FastContour.BasicAssertions" end time: Jan 11 21:49 PST
-"FastContour.BasicAssertions" time elapsed: 00:00:00
-----------------------------------------------------------
-
-7/11 Testing: Distance2D.BasicAssertions
-7/11 Test: Distance2D.BasicAssertions
-Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=Distance2D.BasicAssertions" "--gtest_also_run_disabled_tests"
-Directory: /home/jlb10333/projects/FastContour/build
-"Distance2D.BasicAssertions" start time: Jan 11 21:49 PST
-Output:
-----------------------------------------------------------
-Running main() from /home/jlb10333/googletest/googletest/src/gtest_main.cc
-Note: Google Test filter = Distance2D.BasicAssertions
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from Distance2D
-[ RUN      ] Distance2D.BasicAssertions
-[       OK ] Distance2D.BasicAssertions (0 ms)
-[----------] 1 test from Distance2D (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.08 sec
-----------------------------------------------------------
-Test Passed.
-"Distance2D.BasicAssertions" end time: Jan 11 21:49 PST
-"Distance2D.BasicAssertions" time elapsed: 00:00:00
-----------------------------------------------------------
-
-8/11 Testing: Midpoint2D.BasicAssertions
-8/11 Test: Midpoint2D.BasicAssertions
-Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=Midpoint2D.BasicAssertions" "--gtest_also_run_disabled_tests"
-Directory: /home/jlb10333/projects/FastContour/build
-"Midpoint2D.BasicAssertions" start time: Jan 11 21:49 PST
-Output:
-----------------------------------------------------------
-Running main() from /home/jlb10333/googletest/googletest/src/gtest_main.cc
-Note: Google Test filter = Midpoint2D.BasicAssertions
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from Midpoint2D
-[ RUN      ] Midpoint2D.BasicAssertions
-[       OK ] Midpoint2D.BasicAssertions (0 ms)
-[----------] 1 test from Midpoint2D (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.07 sec
-----------------------------------------------------------
-Test Passed.
-"Midpoint2D.BasicAssertions" end time: Jan 11 21:49 PST
-"Midpoint2D.BasicAssertions" time elapsed: 00:00:00
-----------------------------------------------------------
-
-9/11 Testing: Intersect.FailCases
-9/11 Test: Intersect.FailCases
-Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=Intersect.FailCases" "--gtest_also_run_disabled_tests"
-Directory: /home/jlb10333/projects/FastContour/build
-"Intersect.FailCases" start time: Jan 11 21:49 PST
-Output:
-----------------------------------------------------------
-Running main() from /home/jlb10333/googletest/googletest/src/gtest_main.cc
-Note: Google Test filter = Intersect.FailCases
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from Intersect
-[ RUN      ] Intersect.FailCases
-[       OK ] Intersect.FailCases (0 ms)
-[----------] 1 test from Intersect (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.08 sec
-----------------------------------------------------------
-Test Passed.
-"Intersect.FailCases" end time: Jan 11 21:49 PST
-"Intersect.FailCases" time elapsed: 00:00:00
-----------------------------------------------------------
-
-10/11 Testing: Intersect.BasicAssertions
-10/11 Test: Intersect.BasicAssertions
+11/12 Testing: Intersect.BasicAssertions
+11/12 Test: Intersect.BasicAssertions
 Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=Intersect.BasicAssertions" "--gtest_also_run_disabled_tests"
 Directory: /home/jlb10333/projects/FastContour/build
-"Intersect.BasicAssertions" start time: Jan 11 21:49 PST
+"Intersect.BasicAssertions" start time: Feb 15 23:49 PST
 Output:
 ----------------------------------------------------------
 Running main() from /home/jlb10333/googletest/googletest/src/gtest_main.cc
@@ -257,45 +89,37 @@ Note: Google Test filter = Intersect.BasicAssertions
 [----------] Global test environment set-up.
 [----------] 1 test from Intersect
 [ RUN      ] Intersect.BasicAssertions
-[       OK ] Intersect.BasicAssertions (0 ms)
+/home/jlb10333/projects/FastContour/test/utils_test.cc:26: Failure
+Expected equality of these values:
+  intersect(cv::Vec2f(-1, -2), cv::Vec2f(3, 2), cv::Vec2f(-2, 2), cv::Vec2f(2, -2)).value()[0]
+    Which is: 1
+  0.5
+
+/home/jlb10333/projects/FastContour/test/utils_test.cc:27: Failure
+Expected equality of these values:
+  intersect(cv::Vec2f(-1, -2), cv::Vec2f(3, 2), cv::Vec2f(-2, 2), cv::Vec2f(2, -2)).value()[1]
+    Which is: -1
+  -0.5
+
+unknown file: Failure
+C++ exception with description "bad optional access" thrown in the test body.
+
+[  FAILED  ] Intersect.BasicAssertions (0 ms)
 [----------] 1 test from Intersect (0 ms total)
 
 [----------] Global test environment tear-down
 [==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
+[  PASSED  ] 0 tests.
+[  FAILED  ] 1 test, listed below:
+[  FAILED  ] Intersect.BasicAssertions
+
+ 1 FAILED TEST
 <end of output>
-Test time =   0.07 sec
+Test time =   0.01 sec
 ----------------------------------------------------------
-Test Passed.
-"Intersect.BasicAssertions" end time: Jan 11 21:49 PST
+Test Failed.
+"Intersect.BasicAssertions" end time: Feb 15 23:49 PST
 "Intersect.BasicAssertions" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-11/11 Testing: FloatEqual.BasicAssertions
-11/11 Test: FloatEqual.BasicAssertions
-Command: "/home/jlb10333/projects/FastContour/build/bin/FastContour_test" "--gtest_filter=FloatEqual.BasicAssertions" "--gtest_also_run_disabled_tests"
-Directory: /home/jlb10333/projects/FastContour/build
-"FloatEqual.BasicAssertions" start time: Jan 11 21:49 PST
-Output:
-----------------------------------------------------------
-Running main() from /home/jlb10333/googletest/googletest/src/gtest_main.cc
-Note: Google Test filter = FloatEqual.BasicAssertions
-[==========] Running 1 test from 1 test suite.
-[----------] Global test environment set-up.
-[----------] 1 test from FloatEqual
-[ RUN      ] FloatEqual.BasicAssertions
-[       OK ] FloatEqual.BasicAssertions (0 ms)
-[----------] 1 test from FloatEqual (0 ms total)
-
-[----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
-[  PASSED  ] 1 test.
-<end of output>
-Test time =   0.07 sec
-----------------------------------------------------------
-Test Passed.
-"FloatEqual.BasicAssertions" end time: Jan 11 21:49 PST
-"FloatEqual.BasicAssertions" time elapsed: 00:00:00
-----------------------------------------------------------
-
-End testing: Jan 11 21:49 PST
+End testing: Feb 15 23:49 PST

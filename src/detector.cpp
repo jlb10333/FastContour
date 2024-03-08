@@ -19,10 +19,13 @@ optional<Vec2f> find_moon_point(const Mat& img, float threshold) {
 
     float stop_val = 0.05;
 
+    Vec3b pixel_values;
+
     while(grid_size_ratio > stop_val) {
         for(int x = image_width * grid_size_ratio; x < image_width; x+= image_width * grid_size_ratio * 2) {
             for(int y = image_height * grid_size_ratio; y < image_height; y+= image_height * grid_size_ratio * 2) {
-                if(img.at<uint8_t>(round(y), round(x)) == 255) {
+                pixel_values = img.at<Vec3b>(round(y), round(x));
+                if((pixel_values[0] + pixel_values[1] + pixel_values[2])/3 >= threshold) {
                     return Vec2f(x,y);
                 }
             }   
@@ -78,18 +81,22 @@ vector<Vec2f> find_anchor_points(const Mat& img, const Vec2f& moon_point) {
     return anchor_points;
 }
 
-Vec2f regress_to_edge(const Mat& img, const Vec2f& point1, const Vec2f& point2) {
+Vec2f regress_to_edge(const Mat& img, const Vec2f& point1, const Vec2f& point2, const float threshold) {
     Vec2f regress_point1 = Vec2f(point1[0], point1[1]);
     Vec2f regress_point2 = Vec2f(point2[0], point2[1]);
 
     Vec2f midpoint;
+    Vec3b midpoint_pixel_values;
+    Vec3b regress_pixel_values;
     while (distance_2d(regress_point1, regress_point2) > 1) {
         midpoint = midpoint_2d(regress_point1, regress_point2);
 
         // std::cout << "point1: " << regress_point1[0] << " " << regress_point1[1] << " " << unsigned(img.at<uint8_t>(round(regress_point1[1]), round(regress_point1[0]))) << "\n";
         // std::cout << "point2: " << regress_point2[0] << " " << regress_point2[1] << " " << unsigned(img.at<uint8_t>(round(regress_point2[1]), round(regress_point2[0]))) << "\n";
 
-        if ((img.at<uint8_t>(round(midpoint[1]), round(midpoint[0])) == 255) == (img.at<uint8_t>(round(regress_point1[1]), round(regress_point1[0])) == 255)) { 
+        midpoint_pixel_values = img.at<Vec3b>(round(midpoint[1]), round(midpoint[0]));
+        regress_pixel_values = img.at<Vec3b>(round(regress_point1[1]), round(regress_point1[0]));
+        if (((midpoint_pixel_values[0]+midpoint_pixel_values[1]+midpoint_pixel_values[2])/3 >= threshold) == ((regress_pixel_values[0]+regress_pixel_values[1]+regress_pixel_values[2])/3 >= threshold)) { 
             // midpoint and rpoint1 are on same side
             regress_point1[0] = midpoint[0];
             regress_point1[1] = midpoint[1];
@@ -103,19 +110,19 @@ Vec2f regress_to_edge(const Mat& img, const Vec2f& point1, const Vec2f& point2) 
     return midpoint_2d(regress_point1, regress_point2);
 }
 
-pair<float, float> calculate_error(const vector<Vec2f>& point_arr, const RotatedRect& ellipse) {
+pair<float, float> calculate_error(const vector<Vec2f>& point_arr, const RotatedRect& ellipse, const Size& img_size) {
     float a = ellipse.size.width/2;
     float b = ellipse.size.height/2;
 
     float h = ellipse.center.x;
     float k = ellipse.center.y;
 
-    float A = ellipse.angle;
+    float A = ellipse.angle * 0.0174533;
 
     float error;
 
     float maximum_positive_error = 0;
-    float minimum_negative_error = 0;
+    float sum_total_error = 0;
     
     for(int i = 0; i < point_arr.size(); i++) {
         Vec2f point = point_arr[i];
@@ -128,24 +135,29 @@ pair<float, float> calculate_error(const vector<Vec2f>& point_arr, const Rotated
             (pow(((x-h)*sin(A)) - ((y-k)*cos(A)), 2)/(b*b))
             )-1;
 
-        cout << "point " << i << " error: " << error << "\n";
+        //cout << "point " << i << " error: " << error << "\n";
 
         if (error > 0 && error > maximum_positive_error) {
             maximum_positive_error = error;
         }
-        if (error < 0 && error < minimum_negative_error) {
-            minimum_negative_error = error;
-        }
+        sum_total_error+=abs(error);
     }
 
-    return pair<float, float>(maximum_positive_error, minimum_negative_error);
+    float avg_error = sum_total_error/point_arr.size();
+    float acircular_disincentive = abs((a/b) - 1);
+
+    return pair<float, float>(maximum_positive_error, acircular_disincentive);
 }
 
-optional<RotatedRect> fast_contour(const Mat& img, float threshold=30) {
-    optional<Vec2f> moon_point_result = find_moon_point(img);
+// float calculate_error(const RotatedRect& ellipse) {
+//     return abs(ellipse.size.width/ellipse.size.height - 1);
+// }
+
+optional<RotatedRect> fast_contour(const Mat& img, float threshold) {
+    optional<Vec2f> moon_point_result = find_moon_point(img, threshold);
 
     if (!moon_point_result.has_value()) {
-        cout << "empty\n";
+        //cout << "empty\n";
 
         return nullopt;
     }
@@ -156,10 +168,14 @@ optional<RotatedRect> fast_contour(const Mat& img, float threshold=30) {
 
     vector<Vec2f> edge_points;
     for (int i = 0; i < anchor_points.size(); i++) {
-        Vec2f edge_point = regress_to_edge(img, moon_point, anchor_points.at(i));
-        //cout << "Edge point " << i << ": " << edge_point[0] << " " << edge_point[1] << "\n";
-        edge_points.push_back(regress_to_edge(img, moon_point, anchor_points.at(i)));
+        edge_points.push_back(regress_to_edge(img, moon_point, anchor_points.at(i), threshold));
     }
+
+    //cout << "edge points: ";
+    // for (Vec2f i: edge_points) {
+    //     cout << i << " ";
+    // }
+    // cout << "\n";
 
     float min_error = -1;
     RotatedRect detected_ellipse;
@@ -176,14 +192,13 @@ optional<RotatedRect> fast_contour(const Mat& img, float threshold=30) {
         }
 
         detected_ellipse = fitEllipse(edge_point_subset);
-        ellipse_error = calculate_error(edge_points, detected_ellipse);
+        ellipse_error = calculate_error(edge_points, detected_ellipse, img.size());
 
-        cout << "index: " << i << "; positive error: " << ellipse_error.first << "; negative error: " << ellipse_error.second << ";\n";
-
+        //cout << "index " << i << ": error " << ellipse_error.first << " " << ellipse_error.second << "\n\n";
 
         if(ellipse_error.first > error_stop) {continue;}
 
-        if(min_error == -1 || ellipse_error.second > min_error) {
+        if(min_error == -1 || ellipse_error.second < min_error) {
             min_error = ellipse_error.second;
             best_ellipse = detected_ellipse;
             best_index = i;
@@ -195,31 +210,45 @@ optional<RotatedRect> fast_contour(const Mat& img, float threshold=30) {
         edge_point_subset.push_back(edge_points.at((best_index + i) % 20));
     }
 
+    //cout << "best index: " << best_index << "\n";
+
     for(int i = 0; i < 14; i++) {
         edge_point_subset.push_back(edge_points.at((best_index + 6 + i) % 20));
         detected_ellipse = fitEllipse(edge_point_subset);
-        ellipse_error = calculate_error(edge_points, detected_ellipse);
+        ellipse_error = calculate_error(edge_points, detected_ellipse, img.size());
 
         if(ellipse_error.first > error_stop || ellipse_error.second > min_error) {
+            //cout << "clockwise stopping.. overall error: " << ellipse_error.second << " min error " << min_error << "\n";
             edge_point_subset.pop_back();
             break;
         }
 
+        //cout << "including point " << (best_index + 6 + i) % 20 << "\n";
         best_ellipse = detected_ellipse;
+        min_error = ellipse_error.second;
     }
 
     for(int i = 0; i < 14; i++) {
-        edge_point_subset.push_back(edge_points.at((best_index - i + 20) % 20));
+        edge_point_subset.push_back(edge_points.at((best_index - i + 19) % 20));
         detected_ellipse = fitEllipse(edge_point_subset);
-        ellipse_error = calculate_error(edge_points, detected_ellipse);
+        ellipse_error = calculate_error(edge_points, detected_ellipse, img.size());
 
-        if(ellipse_error.first > error_stop || ellipse_error.second > min_error) {
+         if(ellipse_error.first > error_stop || ellipse_error.second > min_error) {
+            //cout << "counterclockwise stopping.. overall error: " << ellipse_error.second << " min error " << min_error << "\n";
             edge_point_subset.pop_back();
             break;
         }
-        
+
+        //cout << "including point " << (best_index + 6 + i) % 20 << "\n";
         best_ellipse = detected_ellipse;
+        min_error = ellipse_error.second;
     }
+
+    // cout << "points: ";
+    // for (Vec2f i: edge_point_subset) {
+    //     cout << i << " ";
+    // }
+    // cout << "\n";
 
     return best_ellipse;
 }

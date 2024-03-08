@@ -33,7 +33,10 @@ file(GLOB TEST
     "test/*.cpp"
 )
 file(GLOB DEMO
-    "demo/*.cpp"
+    "demo/demo.cpp"
+)
+file(GLOB DEMO_MULTI
+    "demo/demo_multi.cpp"
 )
 
 # setup external libraries
@@ -62,6 +65,10 @@ add_executable(${PROJECT_NAME}_demo
 ${DEMO}
 )
 
+add_executable(${PROJECT_NAME}_demo_multi
+${DEMO_MULTI}
+)
+
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
 # add -fPIC compile flag for MoonRegistration for linux system
 set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
@@ -75,6 +82,7 @@ enable_testing()
 target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBS})
 target_link_libraries(${PROJECT_NAME}_test ${OpenCV_LIBS} ${PROJECT_NAME} GTest::gtest_main)
 target_link_libraries(${PROJECT_NAME}_demo ${OpenCV_LIBS} ${PROJECT_NAME})
+target_link_libraries(${PROJECT_NAME}_demo_multi ${OpenCV_LIBS} ${PROJECT_NAME})
 
 include(GoogleTest)
 gtest_discover_tests(${PROJECT_NAME}_test)
